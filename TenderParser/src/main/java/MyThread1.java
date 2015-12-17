@@ -30,7 +30,6 @@ public class MyThread1 implements Runnable {
         Pattern pattern = Pattern.compile("\\d+"); //Regex - любое число                
         Elements links = doc.select("div[class=allRecords]");        
         for (Element link : links) {
-//            System.out.println("text : " + link.text());
             matcher = pattern.matcher(link.text());  
         }
         while(matcher.find()){                    
