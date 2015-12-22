@@ -1,4 +1,4 @@
-package ru.icl.parser.factory;
+package ru.icl.parser.resource;
 
 import java.util.List;
 

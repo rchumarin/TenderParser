@@ -1,6 +1,6 @@
-package ru.icl.parser.factory;
+package ru.icl.parser.resource;
 
-import ru.icl.parser.factory.HttpResource;
+import ru.icl.parser.resource.HttpResource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,10 +20,8 @@ public class HttpResourceImpl implements HttpResource {
         HttpResponse resp;
         BufferedReader br = null;
         String line = null;
-        StringBuilder stringBuilder = new StringBuilder();
-        
+        StringBuilder stringBuilder = new StringBuilder();  
         try {
-            
             resp = httpclient.execute(httpget);            
             int respCode = resp.getStatusLine().getStatusCode();          
             br = new BufferedReader(new InputStreamReader(resp.getEntity().getContent()));                                    
@@ -39,8 +37,7 @@ public class HttpResourceImpl implements HttpResource {
                 ex.printStackTrace();
             }
         } 
-        
-        return stringBuilder;
-        
-    }            
+        return stringBuilder;        
+    }
+    
 }

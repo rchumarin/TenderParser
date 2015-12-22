@@ -1,6 +1,6 @@
-package ru.icl.parser.factory;
+package ru.icl.parser.resource;
 
-import ru.icl.parser.factory.ResourceProcessor;
+import ru.icl.parser.resource.ResourceProcessor;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
