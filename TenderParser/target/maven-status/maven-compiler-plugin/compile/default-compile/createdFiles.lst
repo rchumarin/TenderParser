@@ -1,0 +1,13 @@
+ru/icl/parser/main/Main.class
+ru/icl/parser/dao/TenderDaoImpl.class
+ru/icl/parser/sendmail/MessageSenderTls.class
+ru/icl/parser/model/Tender.class
+ru/icl/parser/sendmail/MessageSenderSsl.class
+ru/icl/parser/dao/TenderDao.class
+ru/icl/parser/sendmail/MessageSenderTls$1.class
+ru/icl/parser/sendmail/MessageSenderSsl$1.class
+ru/icl/parser/dao/EmailDao.class
+ru/icl/parser/model/HibernateUtil.class
+ru/icl/parser/sendmail/MessageSender.class
+ru/icl/parser/model/Email.class
+ru/icl/parser/dao/EmailDaoImpl.class

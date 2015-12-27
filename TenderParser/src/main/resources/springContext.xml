@@ -14,10 +14,16 @@
     <bean id="httpResource" class="ru.icl.parser.resource.HttpResourceImpl"/>
     <bean id="resourceProcessor" class="ru.icl.parser.resource.ResourceProcessorImpl"/>
     <!--<bean id="senderTls" class="ru.icl.parser.sendmail.MessageSenderTls"/>-->
+    
+    <bean id="emailDao" class="ru.icl.parser.dao.EmailDaoImpl"/>
+    <bean id="tenderDao" class="ru.icl.parser.dao.TenderDaoImpl"/>   
         
     <bean id="mainbean" class="ru.icl.parser.main.Main">
         <property name="httpresource" ref="httpResource"/>
         <property name="resourceprocessor" ref="resourceProcessor"/>
         <!--<property name="sendertls" ref="senderTls"/>-->
+        <property name="emaildao" ref="emailDao"/>
+        <property name="tenderdao" ref="tenderDao"/>
     </bean>
+    
 </beans>

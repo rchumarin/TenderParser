@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:tx="http://www.springframework.org/schema/tx"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns="http://www.springframework.org/schema/beans"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd   
+        http://www.springframework.org/schema/tx 
+        http://www.springframework.org/schema/tx/spring-tx.xsd 
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd">
+   
+    <bean id="httpResource" class="ru.icl.parser.resource.HttpResourceImpl"/>
+    <bean id="resourceProcessor" class="ru.icl.parser.resource.ResourceProcessorImpl"/>
+    <!--<bean id="senderTls" class="ru.icl.parser.sendmail.MessageSenderTls"/>-->
+    
+    <bean id="emailDao" class="ru.icl.parser.dao.EmailDaoImpl"/>
+    <bean id="tenderDao" class="ru.icl.parser.dao.TenderDaoImpl"/>   
+        
+    <bean id="mainbean" class="ru.icl.parser.main.Main">
+        <property name="httpresource" ref="httpResource"/>
+        <property name="resourceprocessor" ref="resourceProcessor"/>
+        <!--<property name="sendertls" ref="senderTls"/>-->
+        <property name="emaildao" ref="emailDao"/>
+        <property name="tenderdao" ref="tenderDao"/>
+    </bean>
+    
+</beans>

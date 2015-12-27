@@ -13,7 +13,7 @@ public class Tender  implements java.io.Serializable {
     private Email email;
     private String companyTender;
     private String nameTender;
-    private Long costTender;
+    private String costTender;
     private String deadlineTender;
     private String urlTender;
 
@@ -22,7 +22,7 @@ public class Tender  implements java.io.Serializable {
     public Tender(int id) {this.id = id;}
     
     public Tender(int id, String idTender, Email email, String companyTender, 
-            String nameTender, Long costTender, String deadlineTender, String urlTender) {
+            String nameTender, String costTender, String deadlineTender, String urlTender) {
         this.id = id;
         this.idTender = idTender;
         this.email = email;
@@ -78,10 +78,10 @@ public class Tender  implements java.io.Serializable {
     }
     
     @Column(name="cost_tender")
-    public Long getCostTender() {
+    public String getCostTender() {
         return this.costTender;
     }    
-    public void setCostTender(Long costTender) {
+    public void setCostTender(String costTender) {
         this.costTender = costTender;
     }
 
