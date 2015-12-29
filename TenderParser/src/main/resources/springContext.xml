@@ -4,26 +4,47 @@
         xmlns:tx="http://www.springframework.org/schema/tx"
         xmlns:context="http://www.springframework.org/schema/context"
         xmlns="http://www.springframework.org/schema/beans"
-        xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd   
-        http://www.springframework.org/schema/tx 
-        http://www.springframework.org/schema/tx/spring-tx.xsd 
-        http://www.springframework.org/schema/context 
-        http://www.springframework.org/schema/context/spring-context.xsd">
-   
-    <bean id="httpResource" class="ru.icl.parser.resource.HttpResourceImpl"/>
-    <bean id="resourceProcessor" class="ru.icl.parser.resource.ResourceProcessorImpl"/>
-    <!--<bean id="senderTls" class="ru.icl.parser.sendmail.MessageSenderTls"/>-->
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd   
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd 
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
     
-    <bean id="emailDao" class="ru.icl.parser.dao.EmailDaoImpl"/>
-    <bean id="tenderDao" class="ru.icl.parser.dao.TenderDaoImpl"/>   
-        
-    <bean id="mainbean" class="ru.icl.parser.main.Main">
-        <property name="httpresource" ref="httpResource"/>
-        <property name="resourceprocessor" ref="resourceProcessor"/>
-        <!--<property name="sendertls" ref="senderTls"/>-->
-        <property name="emaildao" ref="emailDao"/>
-        <property name="tenderdao" ref="tenderDao"/>
+    <context:annotation-config/>
+    <tx:annotation-driven transaction-manager="txManager"/>
+    
+    <bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://localhost:5432/TenderCatalog"/>
+        <property name="username" value="rafael.chumarin"/>
+        <property name="password" value="p@ssw0rd"/>
     </bean>
     
+    <bean id="txManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean name="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="ru.icl.parser.model"/>
+        <property name="hibernateProperties">
+            <value>
+                hibernate.dialect=org.hibernate.dialect.PostgreSQL9Dialect
+                hibernate.show_sql=true
+                hibernate.hbm2ddl.auto=update 
+            </value>
+        </property>
+    </bean>
+
+    <bean id="httpResource" class="ru.icl.parser.service.HttpResourceImpl"/>
+    <bean id="resourceProcessor" class="ru.icl.parser.service.ResourceProcessorImpl" />
+    <bean id="tenderDao" class="ru.icl.parser.dao.TenderDaoImpl"/>   
+    <bean id="emailDao" class="ru.icl.parser.dao.EmailDaoImpl"/>   
+        
+    <bean id="mainbean" class="ru.icl.parser.servlet.AllTender">
+        <property name="httpresource" ref="httpResource"/>
+        <property name="resourceprocessor" ref="resourceProcessor"/>
+    </bean>   
 </beans>

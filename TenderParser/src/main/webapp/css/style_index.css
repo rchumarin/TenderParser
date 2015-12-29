@@ -24,8 +24,18 @@ body, html {
 }
 .catalog .slider {
     width: 100%;
-    height: 300px;
-    background-color: #6495ed;        
+    /*height: 300px;*/
+    background-color: #6495ed;
+    color: #f9f9f9;
+    /*font-family: Verdana, Geneva, sans-serif;*/
+    /*font-size: 14px;*/    
+    /*font-weight: normal;*/ 
+    padding: 20px 20px;    
+    /*color: #cccccc;*/
+    font-size: 1rem;
+    /*font-weight: 300;*/    
+    border-left: 3px solid #6495ed;
+
 }
 .catalog .information {
     width: 100%;
@@ -40,7 +50,7 @@ body, html {
     border-left: 3px solid #6495ed;
 }
 .catalog .information h3 {
-    color: #e0e0e0;
+    color: #666666;
     font-size: 1rem;
     font-weight: 300;
     padding: 0px 10px;
@@ -94,6 +104,14 @@ body, html {
 }
 .catalog ul li:hover ul li:hover span {
     background-color: #4d85ea;
+}
+
+.footer{
+    color: #666666;
+    height: 50px;
+    text-align: center;
+    margin:10px;
+    clear: both;
 }
 
 
