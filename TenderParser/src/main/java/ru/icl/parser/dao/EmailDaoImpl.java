@@ -3,39 +3,28 @@ package ru.icl.parser.dao;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.icl.parser.model.Email;
 
-//@Repository
+@Repository
 public class EmailDaoImpl implements EmailDao {
     
-    @Autowired
-    SessionFactory sFactory;
+    @PersistenceContext
+    private EntityManager em;
     
     @Override
-    public List<Email> getEmails() throws SQLException {              
-        List<Email> emails = new ArrayList<Email>();                       
-        emails = sFactory.getCurrentSession().createCriteria(Email.class).list();        
-        return emails;
+    public List<Email> getAll(){                                    
+        return em.createQuery("from Email", Email.class).getResultList();
+        
     }
-   
-//    @Override
-//    public List<Email> getEmails() throws SQLException {
-//        Session sessionFactory = null;        
-//        List<Email> emails = new ArrayList<Email>();               
-//        try{
-//            sessionFactory = HibernateUtil.getSessionFactory().openSession();
-//            emails = sessionFactory.createCriteria(Email.class).list();
-//        } catch(Exception ex) {
-//            ex.printStackTrace();
-//        } finally {
-//            if((sessionFactory != null) && (sessionFactory.isOpen()))
-//                sessionFactory.close();
-//        }
-//        return emails;
-//    }
+
+    @Override
+    public void save(Email email) {
+        em.persist(email);
+    }
     
 }

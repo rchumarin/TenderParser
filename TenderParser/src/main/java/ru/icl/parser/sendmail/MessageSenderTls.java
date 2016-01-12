@@ -7,8 +7,8 @@ import javax.mail.internet.MimeMessage;
 
 public class MessageSenderTls implements MessageSender{
 
-    private String username = "<ваш email на gmail>";
-    private String password = "<ваш пароль>";
+    private String username = "iclcompanytest@gmail.com";//"<ваш email на gmail>";
+    private String password = "k@cnjxrf";//"<ваш пароль>";
     private Properties props;
 
     public void sendMessage(String subject, String text, String toEmail){

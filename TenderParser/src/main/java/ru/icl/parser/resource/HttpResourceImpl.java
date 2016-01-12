@@ -1,6 +1,6 @@
-package ru.icl.parser.service;
+package ru.icl.parser.resource;
 
-import ru.icl.parser.service.HttpResource;
+import ru.icl.parser.resource.HttpResource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

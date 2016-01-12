@@ -10,17 +10,7 @@
     <body>
         <div class="catalog">
             <ul>
-                <li>Services <i class="fa fa-angle-down"></i>
-                    <ul>
-                        <li><a href="<%=request.getContextPath()%>/start">Start</a></li>
-                        <li><a href="<%=request.getContextPath()%>/save">CompareAndSend</a></li>
-                    </ul>
-                </li>
-<!--                    <li>Regex <i class="fa fa-angle-down"></i>
-                <ul>
-                        <li>Choice pattern date <span>...</span></li>
-                    </ul>
-                </li>-->
+                <l>Список тендеров</l>
             </ul>                
             <div class="slider">
                 <%int count=1;%>                                                 
