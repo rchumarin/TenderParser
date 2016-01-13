@@ -13,7 +13,8 @@
                 <li>Services <i class="fa fa-angle-down"></i>
                     <ul>
                         <li><a href="<%=request.getContextPath()%>/start">Start</a></li>
-                        <li><a href="<%=request.getContextPath()%>/save">CompareAndSend</a></li>
+                        <li><a href="<%=request.getContextPath()%>/save">Compare and Send</a></li>
+                        <li><a href="<%=request.getContextPath()%>/view">View in DataBase</a></li>
                     </ul>
                 </li>
 <!--                    <li>Regex <i class="fa fa-angle-down"></i>
@@ -33,7 +34,7 @@
                        <br>4) ${tdr.getNameTender()}                       
                        <br>5) ${tdr.getDeadlineTender()}                      
                        <br>6) ${tdr.getCostTender()}                       
-                       <br>7) <a href="${tdr.getUrlTender()}">${tdr.getUrlTender()}</a> 
+                       <br>7) <a href="${tdr.getUrlTender()}" target="_blank">${tdr.getUrlTender()}</a> 
                        <br>=============== <%=count++%> ==================
                     </p>    
                 </c:forEach>                                                                                                  

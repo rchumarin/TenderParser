@@ -22,7 +22,7 @@ public class EmailServiceImpl implements EmailService{
 
     @Override
     public List<Email> getAll() {
-        return emaildao.getAll();
+        return emaildao.getAll();        
     }
     
 }

@@ -23,7 +23,7 @@
                        <br>4) ${tdr.getNameTender()}                       
                        <br>5) ${tdr.getDeadlineTender()}                      
                        <br>6) ${tdr.getCostTender()}                       
-                       <br>7) <a href="${tdr.getUrlTender()}">${tdr.getUrlTender()}</a> 
+                       <br>7) <a href="${tdr.getUrlTender()}" target="_blank">${tdr.getUrlTender()}</a> 
                        <br>=============== <%=count++%> ==================
                     </p>    
                 </c:forEach>                                                                                                  

@@ -24,6 +24,10 @@
         <property name="messagesender" ref="messageSender"/>        
     </bean> 
     
+    <bean id="resourcebean" class="ru.icl.parser.resource.ResourceProcessorImpl">
+        <property name="httpres" ref="httpResource"/>        
+    </bean> 
+    
     <!--взаимодействие проекта с БД Postgres-->        
     
     <context:annotation-config/>

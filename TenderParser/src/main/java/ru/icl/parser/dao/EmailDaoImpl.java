@@ -1,7 +1,5 @@
 package ru.icl.parser.dao;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,13 +16,11 @@ public class EmailDaoImpl implements EmailDao {
     
     @Override
     public List<Email> getAll(){                                    
-        return em.createQuery("from Email", Email.class).getResultList();
-        
+        return em.createQuery("from Email", Email.class).getResultList();        
     }
 
     @Override
     public void save(Email email) {
         em.persist(email);
-    }
-    
+    }    
 }

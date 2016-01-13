@@ -2,8 +2,7 @@ package ru.icl.parser.model;
 
 import java.util.Set;
 import javax.persistence.*;
-import org.hibernate.FetchMode;
-import org.hibernate.annotations.Fetch;
+import javax.persistence.FetchType;
 import java.io.Serializable;
 
 @Entity

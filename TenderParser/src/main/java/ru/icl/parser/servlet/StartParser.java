@@ -45,7 +45,7 @@ public class StartParser extends HttpServlet {
        
         ApplicationContext context = new ClassPathXmlApplicationContext("springContext.xml");
         BeanFactory factory = (BeanFactory) context;
-        StartParser myBean = (StartParser) factory.getBean("startbean");
+        StartParser myBean = (StartParser) factory.getBean("startbean"); 
         StringBuilder httpResource = myBean.getHttpresource().getHttpResource(ResourceProcessorImpl.url);                        
         tenderList = myBean.getResourceprocessor().process(httpResource);                
         request.setAttribute("tend", tenderList);        

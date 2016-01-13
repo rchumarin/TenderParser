@@ -42,6 +42,7 @@ public class CompareAndSave extends HttpServlet {
         
         ApplicationContext context = new ClassPathXmlApplicationContext("springContext.xml");
         TenderService serviceTender = (TenderService) context.getBean("tenderService");
+        EmailService serviceEmail = (EmailService) context.getBean("emailService");  
         //данные, полученные из БД
         List<Tender> resourceDataBase = serviceTender.getAll();
         
@@ -54,9 +55,9 @@ public class CompareAndSave extends HttpServlet {
         List<Tender> resultList = myBean.resourcecompare.getResourceWithoutDublicate(resourceProcessor, resourceDataBase);
         
         //сохранение resultList в БД
-//        for(Tender tender : resultList) {
-//            serviceTender.save(tender);
-//        }
+        for(Tender tender : resultList) {
+            serviceTender.save(tender);
+        }
         
         //отправка сообщения на почту
         myBean.messagesender.sendMessage("Список тендеров", "http://localhost:8080/ParserTender/view", "rchumarin@gmail.com");

@@ -10,15 +10,14 @@ public class ResourceCompareImpl implements ResourceCompare{
     @Override
     public List<Tender> getResourceWithoutDublicate(List<Tender> resourceProcessor, List<Tender> resourceDataBase) {
         
-//            !!!! ДОРАБОТАТЬ ПРАВИЛЬНОЕ СРАВНЕНИЕ КОЛЛЕКЦИЙ
-        
-        Iterator iteratorResourceProcessor = resourceProcessor.iterator();
+        Iterator<Tender> iteratorResourceProcessor = resourceProcessor.iterator();
         while(iteratorResourceProcessor.hasNext()) {
-            Tender tenderResourceProcessor = (Tender) iteratorResourceProcessor.next();
-            Iterator iteratorResourceDataBase = resourceDataBase.iterator();
+            Tender tenderResourceProcessor = iteratorResourceProcessor.next();
+            Iterator<Tender> iteratorResourceDataBase = resourceDataBase.iterator();
             while(iteratorResourceDataBase.hasNext()) {
-                Tender tenderResourceDataBase = (Tender) iteratorResourceDataBase.next();
-                if (tenderResourceProcessor.equals(tenderResourceDataBase)) {
+                Tender tenderResourceDataBase = iteratorResourceDataBase.next();
+                //сравнение двух коллекции по Id_tender
+                if (tenderResourceProcessor.getIdTender().equals(tenderResourceDataBase.getIdTender())) {                
                     iteratorResourceProcessor.remove();
                }
             }    

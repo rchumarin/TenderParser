@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class TenderDaoImpl implements TenderDao{
+public class TenderDaoImpl implements TenderDao{ 
     
     @PersistenceContext
     private EntityManager em;
