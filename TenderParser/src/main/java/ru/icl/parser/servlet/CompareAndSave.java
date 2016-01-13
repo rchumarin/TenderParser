@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -40,6 +41,9 @@ public class CompareAndSave extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        HttpSession session = request.getSession(true);
+        session.setAttribute("status","Список записанных в БД тендеров:");
+        
         ApplicationContext context = new ClassPathXmlApplicationContext("springContext.xml");
         TenderService serviceTender = (TenderService) context.getBean("tenderService");
         EmailService serviceEmail = (EmailService) context.getBean("emailService");  
@@ -53,16 +57,19 @@ public class CompareAndSave extends HttpServlet {
         CompareAndSave myBean = (CompareAndSave) factory.getBean("savebean");        
         //resultList - результат сравнения resourceProcessor и resourceDataBase
         List<Tender> resultList = myBean.resourcecompare.getResourceWithoutDublicate(resourceProcessor, resourceDataBase);
-        
-        //сохранение resultList в БД
-        for(Tender tender : resultList) {
-            serviceTender.save(tender);
+              
+        if (!resultList.isEmpty()) {
+            System.out.println("ResultList не пустой");
+            //сохранение resultList в БД
+            for(Tender tendr : resultList) {
+                serviceTender.save(tendr);
+            } 
         }
-        
+
         //отправка сообщения на почту
         myBean.messagesender.sendMessage("Список тендеров", "http://localhost:8080/ParserTender/view", "rchumarin@gmail.com");
                 
-        request.setAttribute("tend", resourceProcessor);        
+        request.setAttribute("tend", resultList);        
         try {            
             request.getRequestDispatcher("index.jsp").forward(request, response);            
         } catch (ServletException ex) {

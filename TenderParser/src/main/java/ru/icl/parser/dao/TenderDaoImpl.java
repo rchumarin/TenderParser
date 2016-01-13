@@ -1,13 +1,9 @@
 package ru.icl.parser.dao;
 
 import ru.icl.parser.model.Tender;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -26,4 +22,4 @@ public class TenderDaoImpl implements TenderDao{
     public List<Tender> getAll(){        
         return em.createQuery("from Tender", Tender.class).getResultList();
     }
-} 
+}  

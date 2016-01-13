@@ -9,13 +9,12 @@ import org.springframework.stereotype.Service;
 import ru.icl.parser.dao.TenderDao;
 
 @Service("tenderService")
-@Transactional
 public class TenderServiceImpl implements TenderService{
     
     @Autowired
     private TenderDao dao;
 
-//    @Transactional
+    @Transactional
     @Override
     public void save(Tender tender) {        
         dao.save(tender);

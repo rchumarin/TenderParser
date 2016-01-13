@@ -8,13 +8,12 @@ import ru.icl.parser.dao.EmailDao;
 import ru.icl.parser.model.Email;
 
 @Service("emailService")
-@Transactional
 public class EmailServiceImpl implements EmailService{
 
     @Autowired
     private EmailDao emaildao;
 
-//    @Transactional
+    @Transactional
     @Override
     public void save(Email email) {
         emaildao.save(email);

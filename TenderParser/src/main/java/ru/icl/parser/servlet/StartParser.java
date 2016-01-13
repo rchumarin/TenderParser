@@ -2,9 +2,11 @@ package ru.icl.parser.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -42,19 +44,29 @@ public class StartParser extends HttpServlet {
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-       
+        //на тот случай если сайт не доступен, вывод соответствующего сообщения на index.jsp 
+        HttpSession session = request.getSession(true);
+        session.setAttribute("status",null);
         ApplicationContext context = new ClassPathXmlApplicationContext("springContext.xml");
         BeanFactory factory = (BeanFactory) context;
         StartParser myBean = (StartParser) factory.getBean("startbean"); 
-        StringBuilder httpResource = myBean.getHttpresource().getHttpResource(ResourceProcessorImpl.url);                        
-        tenderList = myBean.getResourceprocessor().process(httpResource);                
-        request.setAttribute("tend", tenderList);        
-        try {            
-            request.getRequestDispatcher("index.jsp").forward(request, response);            
-        } catch (ServletException ex) {
-            java.util.logging.Logger.getLogger(StartParser.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(StartParser.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        try {
+            StringBuilder httpResource = myBean.getHttpresource().getHttpResource(ResourceProcessorImpl.url);                        
+            tenderList = myBean.getResourceprocessor().process(httpResource);                
+            request.setAttribute("tend", tenderList);                                        
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+            } catch (ServletException ex) {
+                Logger.getLogger(StartParser.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(StartParser.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NullPointerException ex) {
+                Logger.getLogger(StartParser.class.getName()).log(Level.SEVERE, null, ex);
+                try {
+                    session.setAttribute("status", "!!! Анализируемый сайт временно недоступен. Попробуйте позже");     
+                    response.sendRedirect(request.getContextPath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
     }    
 }

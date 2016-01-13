@@ -121,7 +121,7 @@ public class ResourceProcessorImpl implements ResourceProcessor{
                         }
                         tend.setDeadlineTender(strDate.toString());                         
                     } catch (Exception ex) {                        
-                        tend.setDeadlineTender("Данные по тендеру не удалось найти");                        
+                        tend.setDeadlineTender("Крайний срок заявки не удалось найти");                        
                         ex.printStackTrace();
                     }    
                 }
@@ -143,7 +143,7 @@ public class ResourceProcessorImpl implements ResourceProcessor{
                         }
                         tend.setDeadlineTender(strDate.toString());                         
                     } catch (Exception ex) {
-                        tend.setDeadlineTender("Данные по тендеру не удалось найти");                        
+                        tend.setDeadlineTender("Крайний срок заявки не удалось найти");                        
                         ex.printStackTrace();
                     }                                 
                 }                                               
