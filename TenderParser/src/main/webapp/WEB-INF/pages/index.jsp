@@ -4,15 +4,28 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>TenderParser</title>
-        <link href="css/style_index.css" rel="stylesheet" type="text/css">
+        <title>TenderParser</title>        
+        <link href="<c:url value="/resources/css/style_index.css" />" rel="stylesheet">
     </head>
     <body>
         <div class="catalog">
             <ul>
-                <l>Список тендеров</l>
+                <li>Services <i class="fa fa-angle-down"></i>
+                    <ul>
+                        <li><a href="<%=request.getContextPath()%>/start">Start</a></li>
+                        <li><a href="<%=request.getContextPath()%>/save">Compare and Send</a></li>                        
+                    </ul>
+                </li>
+<!--                    <li>Regex <i class="fa fa-angle-down"></i>
+                <ul>
+                        <li>Choice pattern date <span>...</span></li>
+                    </ul>
+                </li>-->
             </ul>                
             <div class="slider">
+                <c:if test="${not empty sessionScope.status}">
+                   ${sessionScope.status}
+                </c:if>     
                 <%int count=1;%>                                                 
                 <c:forEach items="${tend}" var="tdr">                       
                     <p>            

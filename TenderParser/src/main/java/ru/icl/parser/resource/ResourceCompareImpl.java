@@ -7,7 +7,6 @@ import ru.icl.parser.model.Tender;
 //получение списка тендеров без дубликатов, размещенных в БД 
 public class ResourceCompareImpl implements ResourceCompare{
 
-    @Override
     public List<Tender> getResourceWithoutDublicate(List<Tender> resourceProcessor, List<Tender> resourceDataBase) {
         
         Iterator<Tender> iteratorResourceProcessor = resourceProcessor.iterator();

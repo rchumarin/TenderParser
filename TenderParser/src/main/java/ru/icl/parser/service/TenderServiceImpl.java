@@ -9,21 +9,26 @@ import org.springframework.stereotype.Service;
 import ru.icl.parser.dao.TenderDao;
 
 @Service("tenderService")
+//@Service
 public class TenderServiceImpl implements TenderService{
-    
+        
     @Autowired
     private TenderDao dao;
 
-    @Transactional
-    @Override
+    @Transactional    
     public void save(Tender tender) {        
-        dao.save(tender);
+        try {
+            dao.save(tender);
+        
+        } catch (Exception e) {
+            System.out.println("Oшибка метода  TenderServiceImpl");
+            e.printStackTrace();
+        }         
     }
     
-    @Override
+    @Transactional
     public List<Tender> getAll() {
         return dao.getAll();
     }
-
-    
+  
 }

@@ -13,7 +13,6 @@ import org.apache.http.params.HttpConnectionParams;
 //получание страницы
 public class HttpResourceImpl implements HttpResource {
 
-    @Override
     public StringBuilder getHttpResource(String address) {
         HttpClient httpclient = new DefaultHttpClient();        
         HttpConnectionParams.setConnectionTimeout(httpclient.getParams(), 30000); // Timeout Limit        
@@ -25,7 +24,7 @@ public class HttpResourceImpl implements HttpResource {
         stringBuilder = new StringBuilder();  
         try {
             resp = httpclient.execute(httpget);            
-            int respCode = resp.getStatusLine().getStatusCode();          
+            int respCode = resp.getStatusLine().getStatusCode();                      
             br = new BufferedReader(new InputStreamReader(resp.getEntity().getContent()));                                    
             while ((line = br.readLine()) != null) {
                 stringBuilder.append(line + "\n"); 

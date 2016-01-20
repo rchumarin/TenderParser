@@ -14,12 +14,10 @@ public class EmailDaoImpl implements EmailDao {
     @PersistenceContext
     private EntityManager em;
     
-    @Override
-    public List<Email> getAll(){                                    
+    public List<Email> getAll(){                                            
         return em.createQuery("from Email", Email.class).getResultList();        
     }
 
-    @Override
     public void save(Email email) {
         em.persist(email);
     }    

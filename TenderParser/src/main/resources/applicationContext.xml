@@ -12,27 +12,32 @@
     <bean id="httpResource" class="ru.icl.parser.resource.HttpResourceImpl"/>
     <bean id="resourceProcessor" class="ru.icl.parser.resource.ResourceProcessorImpl" />      
     <bean id="resourceCompare" class="ru.icl.parser.resource.ResourceCompareImpl" /> 
-    <bean id="messageSender" class="ru.icl.parser.sendmail.MessageSenderTls" /> 
+    <bean id="messageSender" class="ru.icl.parser.sendmail.MessageSenderTls" />
+    <bean id="urlAddress" class="ru.icl.parser.resource.UrlAddressImpl" /> 
         
-    <bean id="startbean" class="ru.icl.parser.servlet.StartParser">
+    <bean id="startbean" class="ru.icl.parser.controller.MyController">
         <property name="httpresource" ref="httpResource"/>
         <property name="resourceprocessor" ref="resourceProcessor"/>
-    </bean> 
-    
-    <bean id="savebean" class="ru.icl.parser.servlet.CompareAndSave">
+        <property name="urladdress" ref="urlAddress"/> 
         <property name="resourcecompare" ref="resourceCompare"/>        
-        <property name="messagesender" ref="messageSender"/>        
+        <property name="messagesender" ref="messageSender"/>       
+    </bean>
+    
+    <bean id="resourcebean" class="ru.icl.parser.resource.ResourceProcessorImpl">             
+        <property name="httpresource" ref="httpResource"/>
+        <property name="urladdress" ref="urlAddress"/> 
     </bean> 
     
-    <bean id="resourcebean" class="ru.icl.parser.resource.ResourceProcessorImpl">
-        <property name="httpres" ref="httpResource"/>        
-    </bean> 
+    <!--взаимодействие проекта с БД Postgres-->
     
-    <!--взаимодействие проекта с БД Postgres-->        
-    
+    <!--Включаем опцию использования конфигурационных аннотаций (@Annotation-based configuration)-->
     <context:annotation-config/>
-    <context:component-scan base-package="ru.icl.parser"/>
 
+
+    <!--Определяем папки, в которых будем автоматически искать бины-компоненты (@Component, @Service) -->
+    <context:component-scan base-package="ru.icl.parser.dao"/>
+    <context:component-scan base-package="ru.icl.parser.service"/>
+    
     <!--<tx:annotation-driven transaction-manager="transactionManager"/>--> 
     <tx:annotation-driven mode="proxy" transaction-manager="transactionManager"/>
 
@@ -72,5 +77,3 @@
         <property name="jpaDialect" ref="jpaDialect"/>
     </bean>
 </beans>
-
-

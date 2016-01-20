@@ -13,12 +13,15 @@ public class TenderDaoImpl implements TenderDao{
     @PersistenceContext
     private EntityManager em;
     
-    @Override
     public void save(Tender tender) {
-        em.persist(tender);                   
+        try {
+            em.persist(tender);                   
+        } catch (Exception e) {
+            System.out.println("Oшибка метода  TenderDaoImpl.save");
+            e.printStackTrace();
+        }    
     }    
-
-    @Override
+    
     public List<Tender> getAll(){        
         return em.createQuery("from Tender", Tender.class).getResultList();
     }

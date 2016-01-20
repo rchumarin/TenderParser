@@ -14,12 +14,11 @@ public class EmailServiceImpl implements EmailService{
     private EmailDao emaildao;
 
     @Transactional
-    @Override
     public void save(Email email) {
         emaildao.save(email);
     }
-
-    @Override
+    
+    @Transactional
     public List<Email> getAll() {
         return emaildao.getAll();        
     }
