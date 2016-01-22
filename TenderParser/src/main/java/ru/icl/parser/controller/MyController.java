@@ -145,9 +145,9 @@ public class MyController {
             
             try {
                 for (Email email : serviceEmail.getAll()) {
-                    System.out.println("Email " + email.getEmailEmploye());
+//                    System.out.println("Email " + email.getEmailEmploye());
                     //отправка сообщения на почту
-//                    compareBean.messagesender.sendMessage("Список тендеров", "http://localhost:8080/ParserTender/view", email.getEmailEmploye());
+                    compareBean.messagesender.sendMessage("Список тендеров", "http://localhost:8080/ParserTender/view", email.getEmailEmploye());
                 }
             } catch (Exception e) {
                     e.printStackTrace();

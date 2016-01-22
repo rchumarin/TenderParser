@@ -103,8 +103,8 @@ public class ResourceProcessorImpl implements ResourceProcessor{
             //Анализ страницы с тендерами             
             Elements elements = doc.select("td[class=descriptTenderTd]").select("dl").select("dt"); //link.text() -> № id_tender                                         
             int countTag = 0; 
-            System.out.println();
-            System.out.println("-----------------" + pageList + "-----------------");
+//            System.out.println();
+//            System.out.println("-----------------" + pageList + "-----------------");
             for (Element link : elements) {                  
                 
                 Tender tend = new Tender();                                 

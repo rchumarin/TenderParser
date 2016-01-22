@@ -2,6 +2,10 @@
 
 -- DROP DATABASE "TenderCatalog";
 
+ 
+CREATE USER "rafael.chumarin" WITH ENCRYPTED PASSWORD 'p@ssw0rd';
+
+
 CREATE DATABASE "TenderCatalog"
   WITH OWNER = "rafael.chumarin"
        ENCODING = 'UTF8'
