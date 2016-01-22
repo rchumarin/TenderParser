@@ -1,0 +1,55 @@
+-- Database: "TenderCatalog"
+
+-- DROP DATABASE "TenderCatalog";
+
+CREATE DATABASE "TenderCatalog"
+  WITH OWNER = "rafael.chumarin"
+       ENCODING = 'UTF8'
+       TABLESPACE = pg_default
+       LC_COLLATE = 'ru_RU.UTF-8'
+       LC_CTYPE = 'ru_RU.UTF-8'
+       CONNECTION LIMIT = -1;
+
+
+-- Table: email
+
+-- DROP TABLE email;
+
+CREATE TABLE email
+(
+  keyword text NOT NULL,
+  email_employe text,
+  CONSTRAINT email_pkey PRIMARY KEY (keyword)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE email
+  OWNER TO "rafael.chumarin";
+
+
+-- Table: tender
+
+-- DROP TABLE tender;
+
+CREATE TABLE tender
+(
+  id serial NOT NULL,
+  company_tender text,
+  cost_tender text,
+  deadline_tender text,
+  id_tender text NOT NULL,
+  name_tender text,
+  url_tender text,
+  keyword text,
+  CONSTRAINT tender_pkey PRIMARY KEY (id),
+  CONSTRAINT fk_qjsh1royaxtaiy3q37oc2wh9b FOREIGN KEY (keyword)
+      REFERENCES email (keyword) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT uk_dd5tss2l6yodkv05hee09htiy UNIQUE (id_tender)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE tender
+  OWNER TO "rafael.chumarin";
