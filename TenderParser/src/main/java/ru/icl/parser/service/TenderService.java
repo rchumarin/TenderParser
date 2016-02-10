@@ -9,4 +9,5 @@ import ru.icl.parser.model.Tender;
 public interface TenderService {
     public void save(Tender tender);        
     public List<Tender> getAll();
+    public String getIdTender(String IdTender);
 }

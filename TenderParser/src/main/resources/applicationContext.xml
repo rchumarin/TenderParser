@@ -22,7 +22,7 @@
         <property name="resourcecompare" ref="resourceCompare"/>        
         <property name="messagesender" ref="messageSender"/>       
     </bean>
-    
+
     <bean id="resourcebean" class="ru.icl.parser.resource.ResourceProcessorImpl">             
         <property name="httpresource" ref="httpResource"/>
         <property name="urladdress" ref="urlAddress"/> 

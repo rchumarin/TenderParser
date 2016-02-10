@@ -3,6 +3,7 @@ package ru.icl.parser.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -131,6 +132,37 @@ public class MyController {
 //        resultList = new ArrayList<Tender>();
         List<Tender> resultList = compareBean.resourcecompare.getResourceWithoutDublicate(resourceProcessor, resourceDataBase); 
         
+        Iterator<Tender> iteratorResultList = resultList.iterator();
+        while(iteratorResultList.hasNext()) {
+            Tender t = iteratorResultList.next();  
+            System.out.println("DataBase ID " + serviceTender.getIdTender(t.getIdTender().toString()));
+            if (serviceTender.getIdTender(t.getIdTender()).isEmpty()) {
+                try {
+                    serviceTender.save(t);
+                }  catch (Exception e) {
+                    e.printStackTrace();
+                    session.setAttribute("status","!!! Ошибка записи в БД");
+                    return "redirect:/"; 
+                }  
+            }
+            else {
+                iteratorResultList.remove();
+            } 
+        } 
+        
+        if (!resultList.isEmpty()) {
+            try {
+                for (Email email : serviceEmail.getAll()) {
+                    compareBean.messagesender.sendMessage("Список тендеров", "http://localhost:8080/ParserTender/view", email.getEmailEmploye());
+                }
+            } catch (Exception e) {
+                    e.printStackTrace();
+                    session.setAttribute("status","!!! Ошибка чтения email из БД / отправки email");
+                    return "redirect:/"; 
+            }
+        }
+        
+        /*
         //сохранение resultList в БД
         if (!resultList.isEmpty()) {
             try {
@@ -154,7 +186,11 @@ public class MyController {
                     session.setAttribute("status","!!! Ошибка чтения email из БД / отправки email");
                     return "redirect:/"; 
             }
-        }          
+        }
+        */
+        
+        
+        
         map.addAttribute("tend", resultList);
         return "index";
     }

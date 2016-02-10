@@ -14,7 +14,7 @@ public class TenderDaoImpl implements TenderDao{
     private EntityManager em;
     
     public void save(Tender tender) {
-        try {
+        try {           
             em.persist(tender);                   
         } catch (Exception e) {
             System.out.println("Oшибка метода  TenderDaoImpl.save");
@@ -25,4 +25,8 @@ public class TenderDaoImpl implements TenderDao{
     public List<Tender> getAll(){        
         return em.createQuery("from Tender", Tender.class).getResultList();
     }
+    
+    public String getIdTender(String IdTender) {
+        return em.createQuery("select id_tender from tender where id_tender="+IdTender, String.class).getSingleResult(); 
+    }   
 }  

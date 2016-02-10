@@ -30,5 +30,10 @@ public class TenderServiceImpl implements TenderService{
     public List<Tender> getAll() {
         return dao.getAll();
     }
+    
+    @Transactional
+    public String getIdTender(String IdTender) {
+        return dao.getIdTender(IdTender);
+    }
   
 }

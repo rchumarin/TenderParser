@@ -4,6 +4,7 @@ import ru.icl.parser.resource.ResourceProcessor;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -41,19 +42,12 @@ public class ResourceProcessorImpl implements ResourceProcessor{
     }
     
     //общий адрес к сайту тендера
-    public static String urlSplit = "http://zakupki.gov.ru/epz/order/quicksearch/update.html?placeOfSearch=FZ_44&_placeOfSearch=on&placeOfSearch=FZ_223&_placeOfSearch=on&_placeOfSearch=on&priceFrom=0&priceTo=200+000+000+000&publishDateFrom=&publishDateTo=&updateDateFrom=&updateDateTo=&orderStages=AF&_orderStages=on&orderStages=CA&_orderStages=on&_orderStages=on&_orderStages=on&sortDirection=false&sortBy=UPDATE_DATE&recordsPerPage=_10&pageNo=&searchString=&strictEqual=false&morphology=false&showLotsInfo=false&isPaging=true&isHeaderClick=&checkIds=";    
+    public static String urlSplit = "http://zakupki.gov.ru/epz/order/quicksearch/update.html?placeOfSearch=FZ_44&_placeOfSearch=on&placeOfSearch=FZ_223&_placeOfSearch=on&_placeOfSearch=on&priceFrom=0&priceTo=200+000+000+000&publishDateFrom=&publishDateTo=&updateDateFrom=&updateDateTo=&orderStages=AF&_orderStages=on&orderStages=CA&_orderStages=on&_orderStages=on&_orderStages=on&sortDirection=false&sortBy=UPDATE_DATE&recordsPerPage=_10&pageNo=1&searchString=&strictEqual=false&morphology=false&showLotsInfo=false&isPaging=true&isHeaderClick=&checkIds=";    
     public List<Tender> process(StringBuilder httpResource) {
         
         String 
             url = null, //адрес сайта со список тендеров
-            hrefFz44 = "http://zakupki.gov.ru",
-            regexUrlFz223 = "http:.+?noticeId=(.\\d+)", //url для тендеров проходящих по фз223
-            regexUrlFz44 = "/epz/.+?regNumber=(.\\d+)", //url для тендеров проходящих по фз44
-//            regexId = "[0-9]{8,20}", //IdTender
-            regexDateFz223 = "(Срок предоставления с).(0?[1-9]|[12][0-9]|3[01]).(0?[1-9]|1[012]).((19|20)\\d\\d).(по).(0?[1-9]|[12][0-9]|3[01]).(0?[1-9]|1[012]).((19|20)\\d\\d)",                
-            regexDateFz44 = "(Дата и время окончания подачи заявок|Дата и время окончания подачи заявок \\(по местному времени\\)|Дата и время окончания подачи котировочных заявок).(0?[1-9]|[12][0-9]|3[01])\\.(0?[1-9]|1[012])\\.((19|20)\\d\\d)",
             keyword = MyController.keyword;     
- 
         Integer 
             pageSum = null, //общее количество страниц          
             tenderSum = null; //общее количество тендеров 
@@ -63,7 +57,7 @@ public class ResourceProcessorImpl implements ResourceProcessor{
         
         Matcher matcher = null;
         
-        //запись ключевого слова
+//        запись ключевого слова
         Email email = new Email();        
         email.setKeyword(keyword);
         
@@ -74,14 +68,10 @@ public class ResourceProcessorImpl implements ResourceProcessor{
         for (Element link : links) {
             matcher = pattern.matcher(link.text());  
         }        
-//        try {            
-            while(matcher.find()){ 
+           
+        while(matcher.find()){ 
             //общее количество тендеров            
             tenderSum = Integer.valueOf(matcher.group());                                            
-//        }
-//        } catch (NullPointerException ex) {
-//            System.out.println("На сайте zakupki.gov.ru регламентные работы");            
-//            ex.printStackTrace();
         }   
         int modulo = tenderSum % 10;        
         //общее количество страниц        
@@ -92,95 +82,33 @@ public class ResourceProcessorImpl implements ResourceProcessor{
         ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
         BeanFactory factory = (BeanFactory) context;
         ResourceProcessorImpl resBean = (ResourceProcessorImpl) factory.getBean("resourcebean"); 
-//        HttpResourceImpl resimpl = new HttpResourceImpl();
         
-        for(int pageList=1; pageList<pageSum+1; pageList++) {              
+        //создать ExecutorService на базе пула из n-потоков (n=pageSum)
+        ExecutorService exec = Executors.newFixedThreadPool(pageSum);
+        ArrayList<Future<List<Tender>>> results = new ArrayList<Future<List<Tender>>>();        
+        for(int pageList=1; pageList<=pageSum; pageList++) {                      
             url = resBean.getUrladdress().getUrlAddress(urlSplit, pageList, keyword);            
             System.out.println("URL " + url);
-//            StringBuilder strBuild = new StringBuilder();
-            StringBuilder strBuild = resBean.getHttpresource().getHttpResource(url);                         
-            Document doc = Jsoup.parse(strBuild.toString()); 
-            //Анализ страницы с тендерами             
-            Elements elements = doc.select("td[class=descriptTenderTd]").select("dl").select("dt"); //link.text() -> № id_tender                                         
-            int countTag = 0; 
-//            System.out.println();
-//            System.out.println("-----------------" + pageList + "-----------------");
-            for (Element link : elements) {                  
-                
-                Tender tend = new Tender();                                 
-                //Ключевое слово
-                tend.setEmail(email);                
-                // № id_Тендера
-                tend.setIdTender(link.text());                
-                // Название организации
-                tend.setCompanyTender(doc.select("td[class=descriptTenderTd]").get(countTag).getElementsByTag("dd").get(0).text());                                               
-                // Название тендера
-                tend.setNameTender(doc.select("td[class=descriptTenderTd]").get(countTag).getElementsByTag("dd").get(1).text());                                                 
-                //Стоимость
-                tend.setCostTender(doc.select("div[class=registerBox]").get(countTag).getElementsByTag("td").get(2).text());                               
-                countTag++;                             
-                // ФЗ_223 - Поиск Крайнего срока тендера               
-                Pattern patternFz223 = Pattern.compile(regexUrlFz223);
-                Matcher matcherFz223 = patternFz223.matcher(link.html());        
-                if (matcherFz223.find()) {                    
-                    //url тендера 
-                    tend.setUrlTender(matcherFz223.group());
-                    Document docFz223 = null;
-                    try {
-                        //переходим на новую страницу где указан Крайний срок тендера
-                        docFz223 = Jsoup.connect(matcherFz223.group()).timeout(30000).get();                                                 
-                        //Deadline: <с dd.mm.yyyy по dd.mm.yyyy>
-                        Pattern patternDate = Pattern.compile(regexDateFz223);
-//                        Matcher matcherDate = patternDate.matcher(docFz223.select("div[class=noticeTabBoxWrapper]").get(5).text());//3
-                        Matcher matcherDate = patternDate.matcher(docFz223.select("div[class=noticeTabBoxWrapper]").text());//3
-                        StringBuilder strDate = new StringBuilder();
-                        while (matcherDate.find()) {
-                            strDate.append(matcherDate.group() + " ");
-                        }
-//                        tend.setDeadlineTender(strDate.toString()); 
-                        if (strDate.toString().isEmpty()) {tend.setDeadlineTender("НЕТ ДАННЫХ"); }
-                        else tend.setDeadlineTender(strDate.toString()); 
-                        
-                    } catch (Exception ex) {                        
-                        Logger.getLogger(ResourceProcessorImpl.class.getName()).log(Level.SEVERE, null, ex);
-                        tend.setDeadlineTender("Крайний срок тендера не удалось найти"); 
-                        System.out.println("Крайний срок тендера не удалось найти");
-                    }    
+            StringBuilder strBuild = resBean.getHttpresource().getHttpResource(url); 
+            //поместить задачу в очередь на выполнение
+            results.add(exec.submit(new ResourceProcessorCallable(strBuild, email, pageList)));
+        }            
+        try {
+            //получить результат выполнения задачи            
+            for(Future<List<Tender>> futureList : results) {
+                for(Tender tender : futureList.get()) {
+                        list.add(tender);
                 }
-                
-                // ФЗ_44 - Поиск Крайнего срока тендера                                
-                Pattern patternFz44 = Pattern.compile(regexUrlFz44);
-                Matcher matcherFz44 = patternFz44.matcher(link.html());                
-                if (matcherFz44.find()) {                                        
-                    //url тендера 
-                    tend.setUrlTender(hrefFz44.concat(matcherFz44.group()));                     
-                    Document docFz44 = null;
-                    try {
-                        //переходим на новую страницу где указан Крайний срок тендера
-                        docFz44 = Jsoup.connect(hrefFz44.concat(matcherFz44.group())).timeout(30000).get();                        
-                        Pattern patternDate = Pattern.compile(regexDateFz44);
-//                        Matcher matcherDate = patternDate.matcher(docFz44.select("table").get(3).text());
-                        Matcher matcherDate = patternDate.matcher(docFz44.select("table").text());
-                        
-                        StringBuilder strDate = new StringBuilder();
-                        while (matcherDate.find()) {
-                            strDate.append(matcherDate.group() + " ");
-                        }                        
-                        if (strDate.toString().isEmpty()) {
-                            tend.setDeadlineTender("НЕТ ДАННЫХ"); 
-                        }
-                        else tend.setDeadlineTender(strDate.toString()); 
-                        
-                    } catch (Exception ex) {
-                        Logger.getLogger(ResourceProcessorImpl.class.getName()).log(Level.SEVERE, null, ex);
-                        tend.setDeadlineTender("Крайний срок тендера не удалось найти"); 
-                        System.out.println("Крайний срок тендера не удалось найти");
-                    }                                 
-                }               
-                list.add(tend);
-            }            
+                System.out.println();				           
+            }    
+        } catch (InterruptedException ie) {           
+            ie.printStackTrace(System.err);
+        } catch (ExecutionException ee) {
+            ee.printStackTrace(System.err);
+        }
+        finally {
+            exec.shutdown();                       
         } 
-        return list;       
+        return list;                           
     }    
-}    
-
+}
